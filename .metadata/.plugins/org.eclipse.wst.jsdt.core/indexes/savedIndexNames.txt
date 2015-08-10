@@ -1,0 +1,6 @@
+INDEX VERSION 1.122+/Users/CharlesGao/Projects/ClientServer/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+3763925912.index
+2908010678.index
+453503724.index
+1569491447.index
+171019897.index

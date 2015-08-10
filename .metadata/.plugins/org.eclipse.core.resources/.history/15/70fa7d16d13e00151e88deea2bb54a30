@@ -1,0 +1,35 @@
+package client_server_project.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * URL:http://localhost:8080/ClientServerProject/login.do
+ * Servlet implementation class LoginServletForAndroidClient
+ */
+@WebServlet("/login.do")
+public class LoginServletForAndroidClient extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	
+    public LoginServletForAndroidClient() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("--get--");
+		this.doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
+	}
+
+}

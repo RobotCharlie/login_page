@@ -1,0 +1,75 @@
+package client_server_project.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * URL:http://localhost:8080/ClientServerProject/login.do
+ * Servlet implementation class LoginServletForAndroidClient
+ */
+@WebServlet("/login.do")
+public class LoginServletForAndroidClient extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	
+    public LoginServletForAndroidClient() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("--get--");
+		// We pass the GET Method to POST Method
+		this.doPost(request, response);
+	}
+
+	/**
+	 * --> URLaddress?paramName1=paramValue1&paramName2=paramValue2&...
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("UTF-8");
+		
+		System.out.println("--post--");
+		
+		String loginName = request.getParameter("LoginName");
+		String loginPassword = request.getParameter("LoginPassword");
+		
+		// To see if the sever can get the Name and Password
+		System.out.println(loginName);
+		System.out.println(loginPassword);
+		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTD-8");
+		
+		
+		PrintWriter out = null;
+		try{
+			out = response.getWriter();
+			// Logic judgment of Login request from users
+			if(loginName.equals("Charlie") && loginPassword.equals("123")){
+				// Login success
+				out.println("success!");
+			}else{
+				// Login failure
+				out.println("failure!");
+			}		
+		}finally{
+			if(out!=null){
+				out.close();
+			}
+		}
+
+		
+		
+		
+	}
+
+}
