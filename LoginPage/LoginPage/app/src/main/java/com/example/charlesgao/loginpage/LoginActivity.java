@@ -4,6 +4,7 @@
 package com.example.charlesgao.loginpage;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import java.lang.ref.WeakReference;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
+import service.ServiceRulesExecption;
 import service.UserService;
 import service.UserServiceImplement;
 
@@ -29,10 +31,12 @@ public class LoginActivity extends Activity {
     private Button bt_Reset;
     private static final int FLAG_LOGIN_SUCCESSFUL = 1;
     private static final String LOGIN_FAIL = "LOGIN FAIL";
+    private static final String LOGIN_SUCCEED = "LOGIN SUCCEED";
+    public static final String LOGIN_NAMEORPASSWORD_WRONG = "LOGIN NAME OR PASSWORD DOES NOT MATCH";
 
 
     private UserService userService = new UserServiceImplement();
-
+    private static ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +51,24 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 final String loginName = et_LoginName.getText().toString();
                 final String loginPassword = et_LoginPassword.getText().toString();
-                Toast.makeText(v.getContext(),
-                        "loginName is "+loginName+"; loginPassword is "+loginPassword,
-                        Toast.LENGTH_LONG).show();
+//                Toast.makeText(v.getContext(),
+//                        "loginName is "+loginName+"; loginPassword is "+loginPassword,
+//                        Toast.LENGTH_SHORT).show();
 
                 /**
                  * Basic Check of login
                  */
+
+                /**
+                 * loading...
+                 */
+                if(progressDialog ==null){
+                    progressDialog = new ProgressDialog(LoginActivity.this);
+                }
+                progressDialog.setTitle("Please wait");
+                progressDialog.setMessage("Login...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
 
                 /**
                  * ATTENTION: All checking process are wrote in sub-thread, *NOT* main thread,
@@ -65,9 +80,20 @@ public class LoginActivity extends Activity {
                         try {
                             userService.userLogin(loginName,loginPassword);
                             iHandler.sendEmptyMessage(FLAG_LOGIN_SUCCESSFUL);
+                        } catch (ServiceRulesExecption e){
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            Bundle data = new Bundle();
+                            data.putSerializable("errorMsg", LOGIN_NAMEORPASSWORD_WRONG);
+                            msg.setData(data);
+                            iHandler.sendMessage(msg);
                         } catch (Exception e){
                             e.printStackTrace();
-
+                            Message msg = new Message();
+                            Bundle data = new Bundle();
+                            data.putSerializable("errorMsg", LOGIN_FAIL);
+                            msg.setData(data);
+                            iHandler.sendMessage(msg);
                         }
                     }
                 });
@@ -99,6 +125,24 @@ public class LoginActivity extends Activity {
             // NOW, mActivity have the object on LoginActivity!!!!!!!
             // Get a object form LoginActivity
 
+            int flag = msg.what;
+            switch (flag){
+                case 0:
+                    if (progressDialog != null) progressDialog.dismiss();
+                    String errorMsg = msg.getData().getSerializable("errorMsg").toString();
+                    ((LoginActivity)(mActivity.get())).showTip(errorMsg);
+                    break;
+
+                case FLAG_LOGIN_SUCCESSFUL:
+                    if (progressDialog != null) progressDialog.dismiss();
+                    ((LoginActivity)(mActivity.get())).showTip(LOGIN_SUCCEED);
+                    break;
+                default:
+                    break;
+
+
+            }
+
 
 
         }
@@ -106,9 +150,9 @@ public class LoginActivity extends Activity {
 
     private IHandler iHandler = new IHandler(this);
 
-    private void showTip(Message msg){
+    private void showTip(String string){
 
-        Toast.makeText(this, "msg", Toast.LENGTH_LONG);
+        Toast.makeText(LoginActivity.this, string, Toast.LENGTH_SHORT).show();
     }
 
     private void init(){
