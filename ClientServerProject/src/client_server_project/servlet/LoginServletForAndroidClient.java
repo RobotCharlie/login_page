@@ -46,18 +46,22 @@ public class LoginServletForAndroidClient extends HttpServlet {
 		System.out.println(loginName);
 		System.out.println(loginPassword);		
 		
-		// out is a PrintWriter object that can write things on WebPage
+		// out is a PrintWriter object that can write things on WebPage, and write to theClient
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset = UTF-8");
+		
 		PrintWriter out = null;
+		
 		try{
 			// Now, out can response to the client and write to the client's WebPage
 			out = response.getWriter();
 			// Logic judgment of Login request from users
-			if(loginName.equals("Charlie") && loginPassword.equals("123")){
+			if(loginName.equals("charlie") && loginPassword.equals("123")){
 				// Login success
-				out.println("success!");
+				out.print("success");
 			}else{
 				// Login failure
-				out.println("failure!");
+				out.print("failure");
 			}		
 		}finally{
 			if(out!=null){

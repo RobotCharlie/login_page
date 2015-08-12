@@ -15,10 +15,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
-import service.ServiceRulesExecption;
+import service.ServiceRulesException;
 import service.UserService;
 import service.UserServiceImplement;
 
@@ -33,10 +31,12 @@ public class LoginActivity extends Activity {
     private static final String LOGIN_FAIL = "LOGIN FAIL";
     private static final String LOGIN_SUCCEED = "LOGIN SUCCEED";
     public static final String LOGIN_NAMEORPASSWORD_WRONG = "LOGIN NAME OR PASSWORD DOES NOT MATCH";
+    public static final String LOGIN_SERVER_CONNECTION_ERROR = "CANNOT CONNECT TO SERVER";
 
 
     private UserService userService = new UserServiceImplement();
     private static ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +73,7 @@ public class LoginActivity extends Activity {
                 /**
                  * ATTENTION: All checking process are wrote in sub-thread, *NOT* main thread,
                  * coz you don't want your main thread stuck by an wrong login!!
+                 * The communication between Main Thread and sub-thread are using *HANDLER*
                  */
                 Thread thread = new Thread(new Runnable() {
                     @Override
@@ -80,7 +81,7 @@ public class LoginActivity extends Activity {
                         try {
                             userService.userLogin(loginName,loginPassword);
                             iHandler.sendEmptyMessage(FLAG_LOGIN_SUCCESSFUL);
-                        } catch (ServiceRulesExecption e){
+                        } catch (ServiceRulesException e){
                             e.printStackTrace();
                             Message msg = new Message();
                             Bundle data = new Bundle();
@@ -123,7 +124,7 @@ public class LoginActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             // NOW, mActivity have the object on LoginActivity!!!!!!!
-            // Get a object form LoginActivity
+            // Get a object from LoginActivity
 
             int flag = msg.what;
             switch (flag){
@@ -140,17 +141,14 @@ public class LoginActivity extends Activity {
                 default:
                     break;
 
-
             }
-
-
 
         }
     }
 
     private IHandler iHandler = new IHandler(this);
 
-    private void showTip(String string){
+    public void showTip(String string){
 
         Toast.makeText(LoginActivity.this, string, Toast.LENGTH_SHORT).show();
     }

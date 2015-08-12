@@ -7,6 +7,7 @@ Client：
 
 这里主要的问题就是：1.把副线程写好 2.副线程和主线程之间的联系机制（hendler）要写好
 
+4.Android的Client连接Server有两个方法：HttpClient和HttpUserConnection方法，这里我们先试用HttpClient方法；这种方法可以用Get或Post方法连接Server，我们先使用HttpClient对象和HttpGet对象以Get方式的请求传递参数到Server
 
 
 Server：
