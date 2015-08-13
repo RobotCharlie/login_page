@@ -75,3 +75,11 @@
 127.0.0.1 - - [12/Aug/2015:13:17:58 -0400] "GET / HTTP/1.1" 404 951
 192.168.0.16 - - [12/Aug/2015:13:18:05 -0400] "GET /ClientServerProject/login.do?LoginName=charlie&LoginPassword=123 HTTP/1.1" 200 7
 192.168.0.16 - - [12/Aug/2015:13:20:06 -0400] "GET /ClientServerProject/login.do?LoginName=charlie&LoginPassword=123 HTTP/1.1" 200 7
+127.0.0.1 - - [12/Aug/2015:22:43:29 -0400] "GET / HTTP/1.1" 404 951
+0:0:0:0:0:0:0:1%0 - - [12/Aug/2015:22:43:30 -0400] "GET /ClientServerProject/login.do HTTP/1.1" 200 -
+192.168.0.16 - - [12/Aug/2015:22:43:32 -0400] "GET /ClientServerProject/login.do?LoginName=charlie&LoginPassword=123 HTTP/1.1" 200 7
+192.168.0.16 - - [12/Aug/2015:22:43:42 -0400] "GET /ClientServerProject/login.do?LoginName=charlie&LoginPassword=123 HTTP/1.1" 200 7
+127.0.0.1 - - [12/Aug/2015:22:54:42 -0400] "GET / HTTP/1.1" 404 951
+192.168.0.16 - - [12/Aug/2015:22:54:45 -0400] "GET /ClientServerProject/login.do?LoginName=charlie&LoginPassword=123 HTTP/1.1" 200 7
+192.168.0.16 - - [12/Aug/2015:23:33:22 -0400] "POST /ClientServerProject/login.do HTTP/1.1" 200 7
+192.168.0.16 - - [12/Aug/2015:23:33:41 -0400] "POST /ClientServerProject/login.do HTTP/1.1" 200 7

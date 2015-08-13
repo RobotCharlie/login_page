@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
+import service.ServiceNetworkException;
 import service.ServiceRulesException;
 import service.UserService;
 import service.UserServiceImplement;
@@ -81,6 +82,13 @@ public class LoginActivity extends Activity {
                         try {
                             userService.userLogin(loginName,loginPassword);
                             iHandler.sendEmptyMessage(FLAG_LOGIN_SUCCESSFUL);
+                        } catch (ServiceNetworkException e){
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            Bundle data = new Bundle();
+                            data.putSerializable("errorMsg", LOGIN_SERVER_CONNECTION_ERROR);
+                            msg.setData(data);
+                            iHandler.sendMessage(msg);
                         } catch (ServiceRulesException e){
                             e.printStackTrace();
                             Message msg = new Message();

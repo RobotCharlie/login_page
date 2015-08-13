@@ -9,5 +9,7 @@ Client：
 
 4.Android的Client连接Server有两个方法：HttpClient和HttpUserConnection方法，这里我们先试用HttpClient方法；这种方法可以用Get或Post方法连接Server，我们先使用HttpClient对象和HttpGet对象以Get方式的请求传递参数到Server
 
-
+/**
+*Get和Post两种方法是不一样的，请求方式和封装方式都是不一样的，在Post中，我们要学会使用HttpParams和ClientConnectionManager对象，配置请求参数（Http协议版本号，响应超时时间是多少等等，可以更加细致的设置请求参数）
+*/
 Server：
