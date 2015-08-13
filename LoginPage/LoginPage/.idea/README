@@ -12,4 +12,53 @@ Client：
 /**
 *Get和Post两种方法是不一样的，请求方式和封装方式都是不一样的，在Post中，我们要学会使用HttpParams和ClientConnectionManager对象，配置请求参数（Http协议版本号，响应超时时间是多少等等，可以更加细致的设置请求参数）
 */
+
+
 Server：
+1.处理GET和POST方法
+
+
+JSON：
+1.熟练掌握JSON数据格式
+2.Android Client和Servlet Server是如何*封装和解析*JSON格式数据，*分别*使用什么对象来具体解码
+  封装wrap：如何封装至JSON格式 ；解析parse：数据拿出来后是JSON数据格式，如何对JSON数据进行解析
+  Client:JSONObject;JSONArray
+  Server:json-lib;jackson
+
+JSON数据格式：
+Object-->{String0:Value0,String1:Value1,String2:Value2}
+Array-->[Value0,Value1,Value2]
+Value-->string,number,object,array,true,false,null
+
+example:
+
+{
+"people":[
+{"firstName":"Steve","lastName":"Jobs"},{..},{..}
+]
+}
+
+重难点：JSON数据表示对象和集合
+  面向对象中，“单”的数据--》对象（JSONObject类）； “多”的数据--》集合（JSONArray类）；
+
+  “单”：
+  {
+  "name":"charlie",
+  "age","23"
+  "interests":["singing","dancing","reading"]  //对象嵌套集合
+  }
+
+  “集合”：
+    [
+    {"name":"charlie","age","23"},{"name":alice","age","21"},{"name":"bob","age","22"} //集合嵌套对象
+    ]
+
+  *JSON实质就是：对象和集合能相互嵌套！这才是面向对象的逻辑思维*
+  *我们之所以用JSON而不建议用URL传参的方式，是因为URL传参并不能表现每个paramsName的层级结构，而JSON有嵌套，所以能表示出层级结构（XML也有层级结构）*
+
+
+
+
+
+
+

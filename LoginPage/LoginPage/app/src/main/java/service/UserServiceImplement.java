@@ -20,10 +20,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -75,8 +82,27 @@ public class UserServiceImplement implements UserService {
         /**
          * HttpValuePair --> List<NameValuePair> --> HttpEntity --> HttpPost --> HttpClient
          */
+        // HttpParams is an interface, so we can only initialize an implemented class for it
+        HttpParams httpParams = new BasicHttpParams();
+        // Set ContentCharset of the request
+        HttpProtocolParams.setContentCharset(httpParams, HTTP.UTF_8);
+        // Set the Maximum time of Connection time between Client-side
+        // and Server-side --> ConnectionTimeoutException
+        HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+        // Set the Maximum time of Response time(Server receive the request info.
+        // but can not make the response in a period of time) between Client-side
+        // and Server-side --> SocketTimeoutException
+        HttpConnectionParams.setSoTimeout(httpParams,3000);
 
-        HttpClient httpClient = new DefaultHttpClient();
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        // Regular one: "80" is the port number
+        schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+        // Makes "https" works too
+        schemeRegistry.register(new Scheme("https", PlainSocketFactory.getSocketFactory(), 433));
+        ClientConnectionManager clientConnectionManager = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
+
+
+        HttpClient httpClient = new DefaultHttpClient(clientConnectionManager, httpParams);
         String uri = "http://192.168.0.16:8080/ClientServerProject/login.do";
         HttpPost httpPost = new HttpPost(uri);
         NameValuePair loginnamePair = new BasicNameValuePair("LoginName", loginName);
@@ -95,7 +121,7 @@ public class UserServiceImplement implements UserService {
 
         int stateCode = httpResponse.getStatusLine().getStatusCode();
         if (stateCode != HttpStatus.SC_OK){
-            throw new ServiceNetworkException(LoginActivity.LOGIN_SERVER_CONNECTION_ERROR);
+            throw new ServiceRulesException(LoginActivity.LOGIN_CONNECT_EXCEPTION);
         }
 
         String result = EntityUtils.toString(httpResponse.getEntity(), HTTP.UTF_8);

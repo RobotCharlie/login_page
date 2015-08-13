@@ -36,21 +36,11 @@ public class LoginServletForAndroidClient extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 
-
+		Thread.sleep(5000);
+		
 		request.setCharacterEncoding("UTF-8");
 		
 		System.out.println("--post--");
-		
-		/**
-		 * For Exception Unit Test
-		 */
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
 		
 		String loginName = request.getParameter("LoginName");
 		String loginPassword = request.getParameter("LoginPassword");

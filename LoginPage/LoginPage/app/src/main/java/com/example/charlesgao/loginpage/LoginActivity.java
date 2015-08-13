@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
+import org.apache.http.conn.ConnectTimeoutException;
 
-import service.ServiceNetworkException;
+import java.lang.ref.WeakReference;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import service.ServiceRulesException;
 import service.UserService;
 import service.UserServiceImplement;
@@ -32,7 +35,9 @@ public class LoginActivity extends Activity {
     private static final String LOGIN_FAIL = "LOGIN FAIL";
     private static final String LOGIN_SUCCEED = "LOGIN SUCCEED";
     public static final String LOGIN_NAMEORPASSWORD_WRONG = "LOGIN NAME OR PASSWORD DOES NOT MATCH";
-    public static final String LOGIN_SERVER_CONNECTION_ERROR = "CANNOT CONNECT TO SERVER";
+    public static final String LOGIN_REQUEST_TIME_OUT = "REQUEST TIME OUT";
+    public static final String LOGIN_RESPONSE_TIME_OUT = "RESPONSE TIME OUT";
+    public static final String LOGIN_CONNECT_EXCEPTION = "CAN NOT CONNECT TO SERVER";
 
 
     private UserService userService = new UserServiceImplement();
@@ -82,20 +87,38 @@ public class LoginActivity extends Activity {
                         try {
                             userService.userLogin(loginName,loginPassword);
                             iHandler.sendEmptyMessage(FLAG_LOGIN_SUCCESSFUL);
-                        } catch (ServiceNetworkException e){
+                        } catch (ConnectTimeoutException e){
                             e.printStackTrace();
                             Message msg = new Message();
                             Bundle data = new Bundle();
-                            data.putSerializable("errorMsg", LOGIN_SERVER_CONNECTION_ERROR);
+                            data.putSerializable("errorMsg", LOGIN_REQUEST_TIME_OUT);
                             msg.setData(data);
                             iHandler.sendMessage(msg);
-                        } catch (ServiceRulesException e){
+                            Log.d("Exception", LOGIN_REQUEST_TIME_OUT);
+                        } catch (ConnectException e){
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            Bundle data = new Bundle();
+                            data.putSerializable("errorMsg", LOGIN_CONNECT_EXCEPTION);
+                            msg.setData(data);
+                            iHandler.sendMessage(msg);
+                            Log.d("Exception", LOGIN_CONNECT_EXCEPTION);
+                        } catch (SocketTimeoutException e){
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            Bundle data = new Bundle();
+                            data.putSerializable("errorMsg", LOGIN_RESPONSE_TIME_OUT);
+                            msg.setData(data);
+                            iHandler.sendMessage(msg);
+                            Log.d("Exception", LOGIN_RESPONSE_TIME_OUT);
+                        }catch (ServiceRulesException e){
                             e.printStackTrace();
                             Message msg = new Message();
                             Bundle data = new Bundle();
                             data.putSerializable("errorMsg", LOGIN_NAMEORPASSWORD_WRONG);
                             msg.setData(data);
                             iHandler.sendMessage(msg);
+                            Log.d("Exception", LOGIN_NAMEORPASSWORD_WRONG);
                         } catch (Exception e){
                             e.printStackTrace();
                             Message msg = new Message();

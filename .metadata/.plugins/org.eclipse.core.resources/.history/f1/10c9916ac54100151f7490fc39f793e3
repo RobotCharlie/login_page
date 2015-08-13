@@ -42,7 +42,7 @@ public class LoginServletForAndroidClient extends HttpServlet {
 		System.out.println("--post--");
 		
 		/**
-		 * For Exception Unit Test
+		 * For Exception Unit-Test
 		 */
 //		try {
 //			Thread.sleep(5000);
