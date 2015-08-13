@@ -7,5 +7,10 @@
     <string name="tv_login_password"> Password: </string>
     <string name="bt_login">LOGIN</string>
     <string name="bt_reset">RESET</string>
+    <string name="et_interests">Interests: </string>
+    <string name="cb_PCgame">PC Games</string>
+    <string name="cb_music">Music</string>
+    <string name="cb_sports">Sports</string>
+    <string name="bt_register">Register</string>
 
 </resources>
