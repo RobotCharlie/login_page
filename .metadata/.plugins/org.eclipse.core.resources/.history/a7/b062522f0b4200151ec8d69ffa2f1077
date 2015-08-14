@@ -1,0 +1,76 @@
+package client_server_project.servlet;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@WebServlet("/register.do")
+public class RegisterServerForAndroidClient extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+
+    public RegisterServerForAndroidClient() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("--GET--");
+		this.doPost(request, response);
+	}
+
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("--POST--");
+		request.setCharacterEncoding("UTF-8");
+		
+		/**
+		 * data = {
+		 * 			"loginName":"Charlie","interests":["Music","PCGames","Sports"]
+		 * 		}
+		 */
+		
+		// These Parameters should be the same as what you use in Client!! e.g.:Data; LoginName; Interests
+		String data = request.getParameter("Data");
+		System.out.println(data);
+		
+		/**
+		 * *****************************************************************
+		 * JSON Parsing:
+		 */
+		/*
+		 * json-lib:
+		 */
+		JSONObject jsonObject = JSONObject.fromObject(data);
+		
+		String loginName = jsonObject.getString("LoginName");
+		System.out.println("Register Name is ---> "+loginName+" \nInterests are: ");
+		JSONArray interests = jsonObject.getJSONArray("Interests");
+		if (interests != null) {
+			for (Object obj: interests) {
+				System.out.println("* "+obj.toString());
+			}
+		}
+		/**
+		 * Business Processing: You can do whatever you like by using these info.
+		 * *****************************************************************
+		 */
+
+		
+		
+		// Response to the JSON data:
+		
+		
+	}
+
+}

@@ -23,7 +23,7 @@ JSON：
 2.Android Client和Servlet Server是如何*封装和解析*JSON格式数据，*分别*使用什么对象来具体解码
   封装wrap：如何封装至JSON格式 ；解析parse：数据拿出来后是JSON数据格式，如何对JSON数据进行解析
   Client:JSONObject;JSONArray
-  Server:json-lib;jackson
+  Server:json-lib;jackson (学会使用json-lib开源框架解析请求JSON数据|封装响应JSON数据)
 
 JSON数据格式：
 Object-->{String0:Value0,String1:Value1,String2:Value2}
@@ -57,7 +57,13 @@ example:
   *我们之所以用JSON而不建议用URL传参的方式，是因为URL传参并不能表现每个paramsName的层级结构，而JSON有嵌套，所以能表示出层级结构（XML也有层级结构）*
 
 
+我们的例子是（第一个），主要要学会分清Object和Array，以便使用JSONObject或JSONArray：(只要看最外面的是什么括号就好)
+  data = {"loginName":"charlie","interests":["Music","PCGames","Sports"]} --> Object
+  data = [{"loginName":"charlie","age":"23","id":"1"},{..},{..}] --> Array
 
+  封装总结：总之就是两种：不是array嵌套object，要么就是object嵌套array
+
+在server-side解析的时候，要把一些必要的jar包放到lib里面
 
 
 

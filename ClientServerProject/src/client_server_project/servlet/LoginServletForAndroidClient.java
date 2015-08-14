@@ -69,7 +69,7 @@ public class LoginServletForAndroidClient extends HttpServlet {
 			// Now, out can response to the client and write to the client's WebPage
 			out = response.getWriter();
 			// Logic judgment of Login request from users
-			if(loginName.equals("charlie") && loginPassword.equals("123")){
+			if(loginName.equals("Charlie") && loginPassword.equals("123")){
 				// Login success
 				out.print("success");
 			}else{

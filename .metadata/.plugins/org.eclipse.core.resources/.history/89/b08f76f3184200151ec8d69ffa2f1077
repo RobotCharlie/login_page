@@ -1,0 +1,10 @@
+package client_server_project.servlet;
+
+import java.io.Serializable;
+
+public class ResultJSONBean implements Serializable{
+
+	
+	private 
+
+}

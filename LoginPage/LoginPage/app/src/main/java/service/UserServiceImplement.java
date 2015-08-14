@@ -1,10 +1,12 @@
 package service;
 
 import android.content.Entity;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.charlesgao.loginpage.LoginActivity;
+import com.example.charlesgao.loginpage.RegisterActivity;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -34,8 +36,11 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -133,4 +138,80 @@ public class UserServiceImplement implements UserService {
             throw new ServiceRulesException(LoginActivity.LOGIN_NAMEORPASSWORD_WRONG);
         }
     }
+
+
+    @Override
+    public void userRegister(String loginName, List<String> stringList) throws Exception {
+
+        HttpClient httpClient = new DefaultHttpClient();
+        String uri = "http://192.168.0.16:8080/ClientServerProject/register.do";
+        HttpPost httpPost = new HttpPost(uri);
+
+        /**
+         * *****************************************************************************************
+         * JSON Wrapping
+         * (of data = {"loginName":"charlie","interests":["Music","PCGames","Sports"]})
+         *
+         */
+        // This is the data Object (has two Object, the Value of the second Object is Array)
+        JSONObject jsonObjectOut = new JSONObject();
+        jsonObjectOut.put("LoginName", loginName);
+        // This is that interests Array
+        JSONArray jsonArray = new JSONArray();
+        if (stringList != null) {
+            for (String string : stringList) {
+                jsonArray.put(string);
+            }
+        }
+        // Put the interests to the jsonObject as the second Object
+        jsonObjectOut.put("Interests", jsonArray);
+        /**
+         * *****************************************************************************************
+         */
+
+
+        // Put the Wrapped JSON data into the NameValuePair
+        NameValuePair params = new BasicNameValuePair("Data",jsonObjectOut.toString());
+        // POST Method need List to pass the info to Server, so..
+        List<NameValuePair> nameValuePair = new ArrayList<>();
+        nameValuePair.add(params);
+        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, HTTP.UTF_8));
+
+
+        HttpResponse httpResponse = httpClient.execute(httpPost);
+
+
+        int stateCode = httpResponse.getStatusLine().getStatusCode();
+        if (stateCode != HttpStatus.SC_OK){
+            Log.i("d","Server did not pass back");
+            throw new ServiceRulesException(RegisterActivity.REGISTER_CONNECT_EXCEPTION);
+        }
+
+
+        String result = EntityUtils.toString(httpResponse.getEntity(), HTTP.UTF_8);
+        Log.i("d", result);
+
+        /**
+         * *****************************************************************************************
+         * JSON Parsing again:
+         */
+
+        JSONObject jsonObjectIn = new JSONObject(result);
+        String jsonResult = jsonObjectIn.getString("result");
+        Log.i("d",jsonResult);
+        if (jsonResult.equals("success")) {
+            Log.i("d","REGISTER SUCCESS");
+        } else {
+            String errorMsg = jsonObjectIn.getString("errorMsg");
+            Log.i("d","REGISTER FAILED!!!!!!!!!!");
+            throw new ServiceRulesException(errorMsg);
+        }
+
+        /**
+         * *****************************************************************************************
+         */
+
+    }
+
+
 }
