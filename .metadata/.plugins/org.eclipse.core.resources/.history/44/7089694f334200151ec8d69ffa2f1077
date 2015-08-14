@@ -64,7 +64,7 @@ public class RegisterServerForAndroidClient extends HttpServlet {
 		}
 		/**
 		 * Business Processing: You can do whatever you like by using these
-		 * info. ;Like DataBase
+		 * info.
 		 * *****************************************************************
 		 */
 
